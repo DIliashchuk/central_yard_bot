@@ -6,7 +6,8 @@ import requests
 from price import price_grandmaster, price_master
 from barber_info import Kozachuk_Andriy, Munno_Nikola, Sergiy_Zaika, Viktor_Kozlovskyi, Artem_Scherban, \
     Dmytro_Zhurovets, Denis_Isaenko
-from appointment import book_staff, book_dates
+from appointment import book_staff, book_dates, book_times
+
 
 token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
@@ -85,10 +86,10 @@ def handle_chosen_staff(call):
     staff_id = call.data.split('_')[-1]
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     bot.send_message(call.message.chat.id, f"Выбран сотрудник: {chosen_staff}, ID: {staff_id}")
-    booking_dates(call, staff_id)
+    booking_dates_handler(call, staff_id)
 
 
-def booking_dates(call, staff_id):
+def booking_dates_handler(call, staff_id):
     booking_date = book_dates()
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
@@ -96,17 +97,62 @@ def booking_dates(call, staff_id):
     ]
 
     keyboard.add(*buttons)
-    bot.send_message(call.message.chat.id, "Выберите дату", reply_markup=keyboard)
-    bot.register_next_step_handler(call, handle_booking_dates, staff_id)
 
+    chat_id = call.message.chat.id
+
+    bot.send_message(chat_id, "Выберите дату", reply_markup=keyboard)
+
+
+    bot.register_next_step_handler_by_chat_id(chat_id, lambda message: handle_booking_dates(message, staff_id))
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
 def handle_booking_dates(call, staff_id):
-    selected_date = call.data.split('_')[-1]  # Получаем выбранную дату из callback_data
+    selected_date = call.data.split('_')[-1]  # Get the selected date from callback_data
 
-    bot.send_message(call.message.chat_id, f"Выбранная дата: {selected_date}")
+    # Access the 'message' attribute to get 'chat' information
+    chat_id = call.message.chat.id
 
+    # Your logic for handling the selected date
+    # For example, you might want to store the selected date in a database or perform some other action
+    response_text = f"Date: {selected_date} selected for booking."
 
+    # Send a response back to the user
+    bot.send_message(chat_id, response_text)
+    booking_times_handler(call, staff_id, selected_date)
+
+def booking_times_handler(call, staff_id, selected_date):
+    pass
+#     booking_date = book_dates()
+#     keyboard = types.InlineKeyboardMarkup(row_width=3)
+#     buttons = [
+#         types.InlineKeyboardButton(date, callback_data=f"date_{date}") for date in booking_date
+#     ]
+#
+#     keyboard.add(*buttons)
+#
+#     # Use the chat_id from the original message
+#     chat_id = call.message.chat.id
+#
+#     bot.send_message(chat_id, "Выберите дату", reply_markup=keyboard)
+#
+#     # Register the next step handler with a lambda function
+#     bot.register_next_step_handler_by_chat_id(chat_id, lambda message: handle_booking_times(message, staff_id, date))
+#
+#
+#
+# @bot.callback_query_handler(func=lambda call: call.data.startswith('time_'))
+# def handle_booking_times(call):
+#     selected_time = call.data.split('_')[-1]  # Get the selected time from callback_data
+#
+#     # Access the 'message' attribute to get 'chat' information
+#     chat_id = call.message.chat.id
+#
+#     # Your logic for handling the selected time
+#     # For example, you might want to store the selected time in a database or perform some other action
+#     response_text = f"Time: {selected_time} selected for booking."
+#
+#     # Send a response back to the user
+#     bot.send_message(chat_id, response_text)
 
 
 
