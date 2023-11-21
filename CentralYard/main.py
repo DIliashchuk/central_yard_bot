@@ -67,6 +67,9 @@ def barber_info(message):
     keyboard_4.add(button_7, button_8)
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
 
+def sss():
+    ...
+    pass
 
 
 @bot.message_handler(commands=['appointment'])
@@ -92,7 +95,7 @@ def handle_chosen_staff(call):
 
 
 def booking_dates(call, staff_id):
-    booking_date = book_dates(staff_id)
+    booking_date = book_dates()
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
         types.InlineKeyboardButton(date, callback_data=f"date_{staff_id}_{date}") for date in booking_date
