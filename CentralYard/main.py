@@ -101,8 +101,7 @@ def booking_dates(call, staff_id):
     keyboard.add(*buttons)
     bot.send_message(call.message.chat.id, "Выберите дату", reply_markup=keyboard)
 
-def sss():
-    ...
+
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
 def handle_selected_date(call):
     selected_date = call.data.split('_')[-1]
@@ -119,6 +118,10 @@ def booking_times(call, selected_date, staff_id):
     ]
     keyboard.add(*buttons)
     bot.send_message(call.message.chat.id, "Выберите время", reply_markup=keyboard)
+
+
+def booking_services(call, selected_date, staff_id, ):
+    ...
 
 
 
