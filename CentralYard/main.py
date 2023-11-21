@@ -6,7 +6,7 @@ import requests
 from price import price_grandmaster, price_master
 from barber_info import Kozachuk_Andriy, Munno_Nikola, Sergiy_Zaika, Viktor_Kozlovskyi, Artem_Scherban, \
     Dmytro_Zhurovets, Denis_Isaenko
-from appointment import book_staff, book_dates, book_times
+from appointment import book_staff, book_dates, book_times, services
 
 
 token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
@@ -67,9 +67,6 @@ def barber_info(message):
     keyboard_4.add(button_7, button_8)
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
 
-def sss():
-    ...
-    pass
 
 
 @bot.message_handler(commands=['appointment'])
@@ -95,7 +92,7 @@ def handle_chosen_staff(call):
 
 
 def booking_dates(call, staff_id):
-    booking_date = book_dates()
+    booking_date = book_dates(staff_id)
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
         types.InlineKeyboardButton(date, callback_data=f"date_{staff_id}_{date}") for date in booking_date
@@ -121,10 +118,14 @@ def booking_times(call, selected_date, staff_id):
     ]
     keyboard.add(*buttons)
     bot.send_message(call.message.chat.id, "Выберите время", reply_markup=keyboard)
+    # bot.register_next_step_handler(call.message, handle_booking_time, selected_date, staff_id)
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('time_'))
+def handle_booking_time(call):
+    selected_time = call.data.split('_')[-1]
+    bot.send_message(call.message.chat.id, f"Выбрано время: {selected_time}")
 
 
-def booking_services(call, selected_date, staff_id, ):
-    ...
 
 
 
