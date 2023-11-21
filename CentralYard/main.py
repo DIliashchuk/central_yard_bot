@@ -67,6 +67,8 @@ def barber_info(message):
     keyboard_4.add(button_7, button_8)
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
 
+def sss():
+    ...
 
 @bot.message_handler(commands=['appointment'])
 def make_appointment(message):
