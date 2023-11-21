@@ -83,8 +83,8 @@ def services():
 # print(services())
 
 
-def book_dates():
-    url = "https://api.alteg.io/api/v1/book_dates/777559"
+def book_dates(staff_id):
+    url = f"https://api.alteg.io/api/v1/book_dates/777559?staff_id={staff_id}"
 
     payload = json.dumps({
         "success": True,

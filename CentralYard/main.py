@@ -67,8 +67,7 @@ def barber_info(message):
     keyboard_4.add(button_7, button_8)
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
 
-def sss():
-    ...
+
 
 @bot.message_handler(commands=['appointment'])
 def make_appointment(message):
@@ -93,7 +92,7 @@ def handle_chosen_staff(call):
 
 
 def booking_dates(call, staff_id):
-    booking_date = book_dates()
+    booking_date = book_dates(staff_id)
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
         types.InlineKeyboardButton(date, callback_data=f"date_{staff_id}_{date}") for date in booking_date
@@ -102,7 +101,8 @@ def booking_dates(call, staff_id):
     keyboard.add(*buttons)
     bot.send_message(call.message.chat.id, "Выберите дату", reply_markup=keyboard)
 
-
+def sss():
+    ...
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
 def handle_selected_date(call):
     selected_date = call.data.split('_')[-1]
