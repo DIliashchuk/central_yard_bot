@@ -6,7 +6,7 @@ bot = telebot.TeleBot(token)
 
 
 def Kozachuk_Andriy(call):
-    photo = open('photo/Козачук Андрій.jpg', 'rb')
+    photo = open('photo/Козачук Андрій.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, 'Усім Привіт!\nМене звати Андрій і я більше ніж 5 років роблю справжні '
                                            'чоловічі зачіски.\nНе буду приховувати, я дуже кохаю свою роботу, для '
@@ -22,7 +22,7 @@ def Kozachuk_Andriy(call):
 
 
 def Munno_Nikola(call):
-    photo = open('photo/Никола Мунно.jpg', 'rb')
+    photo = open('photo/Никола Мунно.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт!\nМене звуть Нікола, і від юності мене зачаровувала вміння "
                                            "створювати красу простими рухами. Навіть у дитинстві, я віддавав "
@@ -41,7 +41,7 @@ def Munno_Nikola(call):
 
 
 def Sergiy_Zaika(call):
-    photo = open('photo/Сергій Заїка.jpg', 'rb')
+    photo = open('photo/Сергій Заїка.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт!\nМене звуть Сергій. \nУ своїй роботі я руками творю красу, "
                                            "яка перетворює вас, надаючи стиль і самовираження. Якщо ви хочете "
@@ -56,7 +56,7 @@ def Sergiy_Zaika(call):
 
 
 def Viktor_Kozlovskyi(call):
-    photo = open('photo/Віктор Козловський.jpg', 'rb')
+    photo = open('photo/Віктор Козловський.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт!\nМене звуть Віктор. \nЯ - барбер з багаторічним досвідом. "
                                            "Моя мета - зробити ваш вигляд виразнішим і красивішим. Чи хочете ви "
@@ -71,7 +71,7 @@ def Viktor_Kozlovskyi(call):
 
 
 def Artem_Scherban(call):
-    photo = open('photo/Артем Щербань.jpg', 'rb')
+    photo = open('photo/Артем Щербань.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт! \nМене звати Артем. \nЯ - барбер з досвідом та відчуттям "
                                            "стилю. Якщо вам потрібна якісна стрижка чи креативне втілення задуму, "
@@ -85,7 +85,7 @@ def Artem_Scherban(call):
 
 
 def Dmytro_Zhurovets(call):
-    photo = open('photo/Дмитро Жировець.jpg', 'rb')
+    photo = open('photo/Дмитро Жировець.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт! \nМене звати Дмитро. \nЯ - барбер із великим бажанням "
                                            "створювати стильні образи. Моє завдання - зробити кожного клієнта "
@@ -99,7 +99,7 @@ def Dmytro_Zhurovets(call):
 
 
 def Denis_Isaenko(call):
-    photo = open('photo/Денис Ісаєнко.jpg', 'rb')
+    photo = open('photo/Денис Ісаєнко.jpeg', 'rb')
     bot.send_photo(call.message.chat.id, photo)
     bot.send_message(call.message.chat.id, "Усім Привіт! \nМене звати Денис.\nЯ - барбер з великим бажанням зробити"
                                            "кожного клієнта щасливим. Моя мета - забезпечити вам відчуття комфорту "

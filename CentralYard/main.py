@@ -13,6 +13,7 @@ token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
 
 
+
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, f'Доброго дня, {message.from_user.first_name}!\n'
@@ -35,7 +36,7 @@ def price(message):
 
 @bot.message_handler(commands=['barber_info'])
 def barber_info(message):
-    photo_1 = open('photo/Козачук + Мунно.jpg', 'rb')
+    photo_1 = open('photo/Козачук + Мунно.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_1)
     keyboard_1 = types.InlineKeyboardMarkup(row_width=2)
     button = types.InlineKeyboardButton("Козачук Андрій", callback_data='Kozachuk_Andriy')
@@ -43,7 +44,7 @@ def barber_info(message):
     keyboard_1.add(button, button_2)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_1)
 
-    photo_2 = open('photo/Заїка + Козловский .jpg', 'rb')
+    photo_2 = open('photo/Заїка + Козловский .jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_2)
     keyboard_2 = types.InlineKeyboardMarkup(row_width=2)
     button_3 = types.InlineKeyboardButton("Заїка Cергій", callback_data='Sergiy_Zaika')
@@ -51,14 +52,14 @@ def barber_info(message):
     keyboard_2.add(button_3, button_4)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_2)
 
-    photo_3 = open('photo/Щербань.jpg', 'rb')
+    photo_3 = open('photo/Щербань.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_3)
     keyboard_3 = types.InlineKeyboardMarkup(row_width=2)
     button_6 = types.InlineKeyboardButton("Артем Щербань", callback_data='Artem_Scherban')
     keyboard_3.add(button_6)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_3)
 
-    photo_4 = open('photo/Журовець + Ісаєнко.jpg', 'rb')
+    photo_4 = open('photo/Журовець + Ісаєнко.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_4)
     keyboard_4 = types.InlineKeyboardMarkup(row_width=2)
     button_7 = types.InlineKeyboardButton("Дмитро Жировець", callback_data='Dmytro_Zhurovets')
@@ -86,73 +87,36 @@ def handle_chosen_staff(call):
     staff_id = call.data.split('_')[-1]
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     bot.send_message(call.message.chat.id, f"Выбран сотрудник: {chosen_staff}, ID: {staff_id}")
-    booking_dates_handler(call, staff_id)
+    booking_dates(call, staff_id)
 
 
-def booking_dates_handler(call, staff_id):
+def booking_dates(call, staff_id):
     booking_date = book_dates()
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
-        types.InlineKeyboardButton(date, callback_data=f"date_{date}") for date in booking_date
+        types.InlineKeyboardButton(date, callback_data=f"date_{staff_id}_{date}") for date in booking_date
     ]
 
     keyboard.add(*buttons)
+    bot.send_message(call.message.chat.id, "Выберите дату", reply_markup=keyboard)
 
-    chat_id = call.message.chat.id
-
-    bot.send_message(chat_id, "Выберите дату", reply_markup=keyboard)
-
-
-    bot.register_next_step_handler_by_chat_id(chat_id, lambda message: handle_booking_dates(message, staff_id))
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
-def handle_booking_dates(call, staff_id):
-    selected_date = call.data.split('_')[-1]  # Get the selected date from callback_data
+def handle_selected_date(call):
+    selected_date = call.data.split('_')[-1]
+    staff_id = call.data.split('_')[1]
+    bot.send_message(call.message.chat.id, f"Выбранная дата: {selected_date}, staff_id: {staff_id}")
+    booking_times(call, selected_date, staff_id)
 
-    # Access the 'message' attribute to get 'chat' information
-    chat_id = call.message.chat.id
 
-    # Your logic for handling the selected date
-    # For example, you might want to store the selected date in a database or perform some other action
-    response_text = f"Date: {selected_date} selected for booking."
-
-    # Send a response back to the user
-    bot.send_message(chat_id, response_text)
-    booking_times_handler(call, staff_id, selected_date)
-
-def booking_times_handler(call, staff_id, selected_date):
-    pass
-#     booking_date = book_dates()
-#     keyboard = types.InlineKeyboardMarkup(row_width=3)
-#     buttons = [
-#         types.InlineKeyboardButton(date, callback_data=f"date_{date}") for date in booking_date
-#     ]
-#
-#     keyboard.add(*buttons)
-#
-#     # Use the chat_id from the original message
-#     chat_id = call.message.chat.id
-#
-#     bot.send_message(chat_id, "Выберите дату", reply_markup=keyboard)
-#
-#     # Register the next step handler with a lambda function
-#     bot.register_next_step_handler_by_chat_id(chat_id, lambda message: handle_booking_times(message, staff_id, date))
-#
-#
-#
-# @bot.callback_query_handler(func=lambda call: call.data.startswith('time_'))
-# def handle_booking_times(call):
-#     selected_time = call.data.split('_')[-1]  # Get the selected time from callback_data
-#
-#     # Access the 'message' attribute to get 'chat' information
-#     chat_id = call.message.chat.id
-#
-#     # Your logic for handling the selected time
-#     # For example, you might want to store the selected time in a database or perform some other action
-#     response_text = f"Time: {selected_time} selected for booking."
-#
-#     # Send a response back to the user
-#     bot.send_message(chat_id, response_text)
+def booking_times(call, selected_date, staff_id):
+    book_list = book_times(selected_date)
+    keyboard = types.InlineKeyboardMarkup(row_width=3)
+    buttons = [
+        types.InlineKeyboardButton(time, callback_data=f'time_{time}') for time in book_list
+    ]
+    keyboard.add(*buttons)
+    bot.send_message(call.message.chat.id, "Выберите время", reply_markup=keyboard)
 
 
 
