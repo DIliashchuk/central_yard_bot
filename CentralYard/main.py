@@ -69,6 +69,8 @@ def barber_info(message):
 
 def sss():
     ...
+    pass
+
 
 @bot.message_handler(commands=['appointment'])
 def make_appointment(message):
