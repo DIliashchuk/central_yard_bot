@@ -71,25 +71,22 @@ def barber_info(message):
 def make_appointment(message):
     staff_list = book_staff()
     keyboard = types.InlineKeyboardMarkup(row_width=2)
-    buttons = [types.InlineKeyboardButton(name, callback_data=f'staff_id_{staff_id}') for name, staff_id in
-               staff_list.items()]
+    buttons = [types.InlineKeyboardButton(name, callback_data=f'staff_id_{staff_id}') for name, staff_id in staff_list.items()]
     keyboard.add(*buttons)
 
-    bot.send_message(message.chat.id, "Выберите сотрудника", reply_markup=keyboard)
-
-    bot.register_next_step_handler(message, handle_chosen_staff)
+    bot.send_message(message.chat.id, "Оберіть Барбера, до якого ви бажаєте записатись", reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('staff_id_'))
 def handle_chosen_staff(call):
-    staff_list = book_staff()
     staff_id = call.data.split('_')[-1]
+    staff_list = book_staff()
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
-    bot.send_message(call.message.chat.id, f"Выбран сотрудник: {chosen_staff}, ID: {staff_id}")
-    booking_dates(call, staff_id)
+    bot.send_message(call.message.chat.id, f"Обран Барбер ✂️: {chosen_staff}")
+    booking_dates(call, staff_id, chosen_staff)
 
 
-def booking_dates(call, staff_id):
+def booking_dates(call, staff_id, chosen_staff):
     booking_date = book_dates(staff_id)
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
@@ -97,14 +94,14 @@ def booking_dates(call, staff_id):
     ]
 
     keyboard.add(*buttons)
-    bot.send_message(call.message.chat.id, "Выберите дату", reply_markup=keyboard)
+    bot.send_message(call.message.chat.id, "Оберіть дату 📅", reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
 def handle_selected_date(call):
     selected_date = call.data.split('_')[-1]
     staff_id = call.data.split('_')[1]
-    bot.send_message(call.message.chat.id, f"Выбранная дата: {selected_date}, staff_id: {staff_id}")
+    bot.send_message(call.message.chat.id, f"Обрана дата: {selected_date}")
     booking_times(call, selected_date, staff_id)
 
 
@@ -115,7 +112,7 @@ def booking_times(call, selected_date, staff_id):
         types.InlineKeyboardButton(time, callback_data=f'time_{staff_id}_{selected_date}_{time}') for time in book_list
     ]
     keyboard.add(*buttons)
-    bot.send_message(call.message.chat.id, "Выберите время", reply_markup=keyboard)
+    bot.send_message(call.message.chat.id, "Оберіть час ⏰", reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('time_'))
@@ -124,33 +121,53 @@ def handle_selected_time(call):
     selected_time = data_parts[-1]
     staff_id = data_parts[1]
     selected_date = data_parts[2]
-    book_list_1 = book_times(selected_date)
-    full_time_info = book_list_1.get(selected_time)
-    book_services(call, staff_id, full_time_info)
+    bot.send_message(call.message.chat.id, f"Обран час: {selected_time}")
+    book_services(call, staff_id, selected_date, selected_time)
 
 
-def book_services(call, staff_id, full_time_info):
+def book_services(call, staff_id, selected_date, selected_time):
     booking_services = services()
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     buttons = [
-        types.InlineKeyboardButton(name, callback_data=f'service_id_{service_id}_{staff_id}_{full_time_info}')
+        types.InlineKeyboardButton(name, callback_data=f'service_id_{service_id}_{staff_id}_{selected_date}_{selected_time}')
         for name, service_id in booking_services.items()
     ]
     keyboard.add(*buttons)
 
-    bot.send_message(call.message.chat.id, "Выберите услугу", reply_markup=keyboard)
+    bot.send_message(call.message.chat.id, "Оберіть послугу барбершопу", reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('service_id_'))
 def handle_book_services(call):
     data_parts = call.data.split('_')
-    service_id, staff_id, full_time_info = data_parts[2:5]
-    print(service_id)
-    print(staff_id)
-    print(full_time_info)
-    finallys(service_id, staff_id, full_time_info)
+    service_id, staff_id, selected_date, selected_time= data_parts[2:6]
+    booking_services = services()
+    service_name = next((name for name, id_ in booking_services.items() if id_ == int(service_id)), None)
+
+    bot.send_message(call.message.chat.id, f"Ви обрали послугу: {service_name}")
+    finally_info_book(call, staff_id, selected_date, selected_time, service_name, service_id)
 
 
+
+def finally_info_book(call, staff_id, selected_date, selected_time, service_name, service_id):
+    staff_list = book_staff()
+    chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    buttons = types.InlineKeyboardButton('Підтвердити запис', callback_data='book_yes')
+    buttons_1 = types.InlineKeyboardButton('Скасувати записа', callback_data='book_no')
+    keyboard.add(buttons, buttons_1)
+    bot.send_message(call.message.chat.id, f"Перевірте данні для запису:\n\nВи обрали барбера: {chosen_staff}\n"
+                                           f"Ви обрали дату візиту: {selected_date}\nВи обрали час: {selected_time}\n"
+                                           f"Ви обрали послугу: {service_name}\n\nЯкщо все вірно,"
+                                           f" просимо нажати Так для підтвердження", reply_markup=keyboard)
+    finally_book(call, staff_id, service_id, selected_time, selected_date)
+
+
+def finally_book(call, staff_id, service_id, selected_time, selected_date):
+    book_list_1 = book_times(selected_date)
+    full_time_info = book_list_1.get(selected_time)
+    bot.send_message(call.message.chat.id, 'ss')
+    # finallys(service_id, staff_id, full_time_info)
 @bot.message_handler(commands=['contact'])
 def contact(message):
     bot.send_message(message.chat.id, "Шановний клієнт!\nМи знаходимось за адресою: м.КиЇв, вул.Хрещатик "
