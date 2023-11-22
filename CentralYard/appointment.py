@@ -183,11 +183,15 @@ def finallys(service_id, staff_id, full_time_info):
         res = conn.getresponse()
         if res.status == 200 or res.status == 201:
             print("Успешная запись")
+            return True
         elif res.status == 422:
             error_message = res.read().decode("utf-8")
             print(f"Ошибка записи. Сообщение об ошибке: {error_message}")
+            return False
         else:
             print(f"Ошибка записи. Код состояния: {res.status}")
+            return False
     except http.client.HTTPException as e:
         print(f"Ошибка при выполнении запроса: {e}")
+        return False
 

@@ -16,7 +16,7 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, f'Доброго дня, {message.from_user.first_name}!\n'
-                                      f'Зліва знизу можете побачити меню з усіма командами\n⬇️')
+                                      f'Зліва знизу можете побачити меню зі всіма функціями\n⬇️')
 
 
 @bot.message_handler(commands=['price'])
@@ -148,26 +148,42 @@ def handle_book_services(call):
     finally_info_book(call, staff_id, selected_date, selected_time, service_name, service_id)
 
 
-
 def finally_info_book(call, staff_id, selected_date, selected_time, service_name, service_id):
     staff_list = book_staff()
+    book_list_1 = book_times(selected_date)
+    full_time_info = book_list_1.get(selected_time)
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     keyboard = types.InlineKeyboardMarkup(row_width=2)
-    buttons = types.InlineKeyboardButton('Підтвердити запис', callback_data='book_yes')
+    buttons = types.InlineKeyboardButton('Підтвердити запис', callback_data=f'book_yes_{staff_id}_{service_id}_'
+                                                                            f'{full_time_info}')
     buttons_1 = types.InlineKeyboardButton('Скасувати записа', callback_data='book_no')
     keyboard.add(buttons, buttons_1)
     bot.send_message(call.message.chat.id, f"Перевірте данні для запису:\n\nВи обрали барбера: {chosen_staff}\n"
                                            f"Ви обрали дату візиту: {selected_date}\nВи обрали час: {selected_time}\n"
                                            f"Ви обрали послугу: {service_name}\n\nЯкщо все вірно,"
                                            f" просимо нажати Так для підтвердження", reply_markup=keyboard)
-    finally_book(call, staff_id, service_id, selected_time, selected_date)
 
 
-def finally_book(call, staff_id, service_id, selected_time, selected_date):
-    book_list_1 = book_times(selected_date)
-    full_time_info = book_list_1.get(selected_time)
-    bot.send_message(call.message.chat.id, 'ss')
-    # finallys(service_id, staff_id, full_time_info)
+@bot.callback_query_handler(func=lambda call: call.data.startswith('book_yes'))
+def booking_yes(call):
+    print(call.data)
+    staff_id = call.data.split('_')[2]
+    service_id = call.data.split('_')[3]
+    full_time_info = call.data.split('_')[4]
+    success = finallys(service_id, staff_id, full_time_info)
+    if success:
+        bot.send_message(call.message.chat.id, "Запис пройшов успішно! ")
+    else:
+        bot.send_message(call.message.chat.id, "Вибачте, сталась помилка, спробуйте ще раз або зателефонуйте "
+                                               "до нашего барбера: +38(068)46-46-46-0")
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('book_no'))
+def booking_no(call):
+    bot.send_message(call.message.chat.id, 'Ви відмінили запис\nЗліва знизу можете побачити меню зі всіма функціями\n⬇️')
+    return
+
+
 @bot.message_handler(commands=['contact'])
 def contact(message):
     bot.send_message(message.chat.id, "Шановний клієнт!\nМи знаходимось за адресою: м.КиЇв, вул.Хрещатик "
@@ -200,8 +216,8 @@ def handle_price_grandmaster(call):
         haircut = row['Стрижка']
         price = row['Ціна']
         worktime = row['Тривалість']
-        bot.send_message(call.message.chat.id, f"<u><b>Ви обрали:</b></u> {haircut}\n<u><b>Вартісь складає:</b></u> "
-                                               f"{price} грн.\n<u><b>Тривалість стрижки:</b></u> "
+        bot.send_message(call.message.chat.id, f"<u><b>Ви обрали послугу:</b></u> {haircut}\n<u><b>Вартісь "
+                                               f"складає:</b></u>  {price} грн.\n<u><b>Тривалість стрижки:</b></u> "
                                                f"{worktime}", parse_mode='HTML')
     else:
         bot.send_message(call.message.chat.id, "Помилка: Немає інформації для цього індексу")
@@ -221,8 +237,8 @@ def handle_price_grandmaster(call):
         haircut = row['Стрижка']
         price = row['Ціна']
         worktime = row['Тривалість']
-        bot.send_message(call.message.chat.id, f"<u><b>Ви обрали:</b></u> {haircut}\n<u><b>Вартісь складає:</b></u> "
-                                               f"{price} грн.\n<u><b>Тривалість стрижки:</b></u> "
+        bot.send_message(call.message.chat.id, f"<u><b>Ви обрали послугу:</b></u> {haircut}\n<u><b>Вартісь "
+                                               f"складає:</b></u> {price} грн.\n<u><b>Тривалість стрижки:</b></u> "
                                                f"{worktime}", parse_mode='HTML')
     else:
         bot.send_message(call.message.chat.id, "Помилка: Немає інформації для цього індексу")
@@ -239,6 +255,7 @@ functions = {
     'Dmytro_Zhurovets': Dmytro_Zhurovets,
     'Denis_Isaenko': Denis_Isaenko,
     'barber_info': barber_info
+
 }
 
 
