@@ -6,12 +6,11 @@ import requests
 from price import price_grandmaster, price_master
 from barber_info import Kozachuk_Andriy, Munno_Nikola, Sergiy_Zaika, Viktor_Kozlovskyi, Artem_Scherban, \
     Dmytro_Zhurovets, Denis_Isaenko
-from appointment import book_staff, book_dates, book_times, services
+from appointment import book_staff, book_dates, book_times, services, finallys
 
 
 token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
-
 
 
 @bot.message_handler(commands=['start'])
@@ -68,7 +67,6 @@ def barber_info(message):
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
 
 
-
 @bot.message_handler(commands=['appointment'])
 def make_appointment(message):
     staff_list = book_staff()
@@ -114,21 +112,43 @@ def booking_times(call, selected_date, staff_id):
     book_list = book_times(selected_date)
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
-        types.InlineKeyboardButton(time, callback_data=f'time_{time}') for time in book_list
+        types.InlineKeyboardButton(time, callback_data=f'time_{staff_id}_{selected_date}_{time}') for time in book_list
     ]
     keyboard.add(*buttons)
     bot.send_message(call.message.chat.id, "Выберите время", reply_markup=keyboard)
-    # bot.register_next_step_handler(call.message, handle_booking_time, selected_date, staff_id)
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('time_'))
-def handle_booking_time(call):
-    selected_time = call.data.split('_')[-1]
-    bot.send_message(call.message.chat.id, f"Выбрано время: {selected_time}")
+def handle_selected_time(call):
+    data_parts = call.data.split('_')
+    selected_time = data_parts[-1]
+    staff_id = data_parts[1]
+    selected_date = data_parts[2]
+    book_list_1 = book_times(selected_date)
+    full_time_info = book_list_1.get(selected_time)
+    book_services(call, staff_id, full_time_info)
 
 
+def book_services(call, staff_id, full_time_info):
+    booking_services = services()
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    buttons = [
+        types.InlineKeyboardButton(name, callback_data=f'service_id_{service_id}_{staff_id}_{full_time_info}')
+        for name, service_id in booking_services.items()
+    ]
+    keyboard.add(*buttons)
+
+    bot.send_message(call.message.chat.id, "Выберите услугу", reply_markup=keyboard)
 
 
-
+@bot.callback_query_handler(func=lambda call: call.data.startswith('service_id_'))
+def handle_book_services(call):
+    data_parts = call.data.split('_')
+    service_id, staff_id, full_time_info = data_parts[2:5]
+    print(service_id)
+    print(staff_id)
+    print(full_time_info)
+    finallys(service_id, staff_id, full_time_info)
 
 
 @bot.message_handler(commands=['contact'])

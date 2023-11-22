@@ -1,5 +1,6 @@
 import requests
 import json
+import http.client
 
 
 def book_staff():
@@ -36,9 +37,6 @@ def book_staff():
         return staff_list
     else:
         print("Ошибка при запросе:", response.status_code)
-
-
-# print(book_staff())
 
 
 def services():
@@ -80,8 +78,6 @@ def services():
     else:
         print("Ошибка при запросе:", response.status_code)
 
-# print(services())
-
 
 def book_dates(staff_id):
     url = f"https://api.alteg.io/api/v1/book_dates/777559?staff_id={staff_id}"
@@ -115,7 +111,6 @@ def book_dates(staff_id):
     else:
         print("Ошибка при запросе:", response.status_code)
 
-# print(book_dates())
 
 def book_times(date):
 
@@ -159,4 +154,90 @@ def book_times(date):
 
     print(response.text)
 
-# print(book_times('2023-11-25'))
+
+# def post_result(service_id, staff_id, full_time_info):
+#     url = "https://api.alteg.io/api/v1/book_record/777559"
+#
+#     payload = json.dumps({
+#         "phone": "+380657628742",
+#         "fullname": "Ihor Myshkin",
+#         "email": "lalalend@gigbyte.das",
+#         "appointments": [
+#             {
+#                 "id": 1,
+#                 "services": [
+#                     service_id
+#                 ],
+#                 "staff_id": staff_id,
+#                 "datetime": full_time_info
+#             }
+#         ]
+#     })
+#     headers = {
+#         'Accept': 'application/vnd.api.v2+json',
+#         'Content-Type': 'application/json',
+#         'Authorization': 'Bearer kmhut9umky73276yryjt, User 5efa5ab2f2474930209f9392c78a3dab',
+#         'Cookie': '__cf_bm=UYRrxdKxW7xL6XvnxCgUgji8wZo51uElrpHc4BwttiE-1700585641-0-Ae7K1eVC154svDu+6n7'
+#                   '7eWQcuaMHONw3RdhRzHRF7JNi79C/gTVou9USKGw+l9EdzCJjKGGQv4FvF9cfSQ1ExtE=; _ga_b1fDDQ=GS1.1-2.'
+#                   '1664391493.1.1.1664391604.0.0.0; _ga_b1fDws=GS1.1-2.1664391493.1.1.1664391604.0.0.0; _ga_b1fDxA='
+#                   'GS1.1-2.1664391493.1.1.1664391604.0.0.0; _ga_b1fDxM=GS1.1-2.1664391493.1.1.1664391604.0.0.0; _ga_'
+#                   'b1fDyk=GS1.1-2.1664391493.1.1.1664391604.0.0.0; _ga_b1fEaP=GS1.1-2.1664391493.1.1.1664391604.0.0.0;'
+#                   ' _ga_b1fEbi=GS1.1-2.1664391493.1.1.1664391604.0.0.0; _ga_dqrr=GS1.1-2.1664391493.1.1.1664391604.0.'
+#                   '0.0; auth=kio09h8nt3u1d5im4dtoqeae1m904csincupd8uq7i7jijh75r25f7al0kqpf7v6'
+#     }
+#     try:
+#         response = requests.post(url, headers=headers, data=payload)
+#
+#         if response.status_code == 200:
+#             print("Успешная запись")
+#         else:
+#             print(f"Ошибка записи. Код состояния: {response.status_code}")
+#         if response.status_code == 422:
+#             error_message = response.json().get("message")
+#             print(f"Ошибка записи. Сообщение об ошибке: {error_message}")
+#         if "errors" in response.json():
+#             errors = response.json()["errors"]
+#             print("Ошибка API:")
+#             for error in errors:
+#                 print(error)
+#     except requests.exceptions.RequestException as e:
+#         print(f"Ошибка при выполнении запроса: {e}")
+
+# post_result(1088725, 2219665, "2023-11-25T13:30:00+0200")
+
+def finallys(service_id, staff_id, full_time_info):
+    conn = http.client.HTTPSConnection("api.alteg.io")
+    payload = json.dumps({
+        "phone": "+380657628742",
+        "fullname": "Ihor Myshkin",
+        "email": "lalalend@gigbyte.das",
+        "appointments": [
+            {
+              "id": 1,
+              "services": [
+                service_id
+              ],
+              "staff_id": staff_id,
+              "datetime": full_time_info
+            }
+          ]
+    })
+    headers = {
+        'Accept': 'application/vnd.api.v2+json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer kmhut9umky73276yryjt, User 5efa5ab2f2474930209f9392c78a3dab',
+        'Cookie': 'auth=kio09h8nt3u1d5im4dtoqeae1m904csincupd8uq7i7jijh75r25f7al0kqpf7v6'
+    }
+    try:
+        conn.request("POST", "/api/v1/book_record/777559", payload, headers)
+        res = conn.getresponse()
+        if res.status == 200 or res.status == 201:
+            print("Успешная запись")
+        elif res.status == 422:
+            error_message = res.read().decode("utf-8")
+            print(f"Ошибка записи. Сообщение об ошибке: {error_message}")
+        else:
+            print(f"Ошибка записи. Код состояния: {res.status}")
+    except http.client.HTTPException as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+
