@@ -1,7 +1,7 @@
 import csv
 
 
-REGISTER_FILE = "register.csv"
+REGISTER_FILE = "register.db.csv"
 
 
 def write_to_csv(filename, data, mode='a'):

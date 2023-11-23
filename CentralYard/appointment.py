@@ -155,12 +155,12 @@ def book_times(date):
     print(response.text)
 
 
-def finallys(service_id, staff_id, full_time_info):
+def finallys(service_id, staff_id, full_time_info, name, phone, email):
     conn = http.client.HTTPSConnection("api.alteg.io")
     payload = json.dumps({
-        "phone": "+380657628742",
-        "fullname": "Ihor Myshkin",
-        "email": "lalalend@gigbyte.das",
+        "phone": phone,
+        "fullname": name,
+        "email": email,
         "appointments": [
             {
               "id": 1,
