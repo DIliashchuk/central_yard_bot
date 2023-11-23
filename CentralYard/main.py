@@ -76,12 +76,11 @@ def check_flag(message):
     global flag
     convert_report = read_to_csv(REGISTER_FILE)
     my_personal_id = message.from_user.id
-    print(my_personal_id)
     for i in convert_report:
-        print(i[0])
-        if i[0] == my_personal_id:
+        if int(i[0]) == my_personal_id:
             flag = True
             make_appointment(message)
+            break
     else:
         registration(message)
 
