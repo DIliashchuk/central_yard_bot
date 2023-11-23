@@ -7,16 +7,20 @@ from price import price_grandmaster, price_master
 from barber_info import Kozachuk_Andriy, Munno_Nikola, Sergiy_Zaika, Viktor_Kozlovskyi, Artem_Scherban, \
     Dmytro_Zhurovets, Denis_Isaenko
 from appointment import book_staff, book_dates, book_times, services, finallys
+from utilites import write_to_csv, read_to_csv, REGISTER_FILE, rewrite_to_csv
 
 
 token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
+
+flag = False
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, f'Доброго дня, {message.from_user.first_name}!\n'
                                       f'Зліва знизу можете побачити меню зі всіма функціями\n⬇️')
+    print(message)
 
 
 @bot.message_handler(commands=['price'])
@@ -68,12 +72,54 @@ def barber_info(message):
 
 
 @bot.message_handler(commands=['appointment'])
+def check_flag(message):
+    global flag
+    convert_report = read_to_csv(REGISTER_FILE)
+    my_personal_id = message.from_user.id
+    print(my_personal_id)
+    for i in convert_report:
+        print(i[0])
+        if i[0] == my_personal_id:
+            flag = True
+            make_appointment(message)
+    else:
+        registration(message)
+
+
+def registration(message):
+    bot.send_message(message.chat.id, "Ви вперше зайшли до онлайн запису через нашого бота, просимо Вас "
+                                      "заповнити інформацію\nДанну інформацію треба зповнити лише один раз, "
+                                      "наступного разу система автоматично вас ідентифікує.\n\n"
+                                      "Будь-ласка, введіть ваше ім'я: ")
+    bot.register_next_step_handler(message, registration_name)
+
+
+def registration_name(message):
+    name = message.text
+    bot.send_message(message.chat.id, 'Будь-ласка, введіть ваш мобільний номер телефону: ')
+    bot.register_next_step_handler(message, registration_phone, name)
+
+
+def registration_phone(message, name):
+    phone = message.text
+    bot.send_message(message.chat.id, 'Будь-ласка, введіть вашу електронну пошту: ')
+    bot.register_next_step_handler(message, registration_mail, name, phone)
+
+
+def registration_mail(message, name, phone):
+    mail = message.text
+    personal_id = message.from_user.id
+    write_to_csv(REGISTER_FILE, [personal_id, name, phone, mail])
+    bot.register_next_step_handler(message, make_appointment)
+
+
 def make_appointment(message):
     staff_list = book_staff()
     keyboard = types.InlineKeyboardMarkup(row_width=2)
-    buttons = [types.InlineKeyboardButton(name, callback_data=f'staff_id_{staff_id}') for name, staff_id in staff_list.items()]
-    keyboard.add(*buttons)
+    buttons = [types.InlineKeyboardButton(name, callback_data=f'staff_id_{staff_id}')
+               for name, staff_id in staff_list.items()]
 
+    keyboard.add(*buttons)
     bot.send_message(message.chat.id, "Оберіть Барбера, до якого ви бажаєте записатись", reply_markup=keyboard)
 
 
