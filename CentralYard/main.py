@@ -179,7 +179,7 @@ def handle_selected_date(call):
 
 
 def booking_times(call, selected_date, staff_id, my_personal_id):
-    book_list = book_times(selected_date)
+    book_list = book_times(selected_date, staff_id)
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [
         types.InlineKeyboardButton(time, callback_data=f'time_{staff_id}_{selected_date}_{time}_{my_personal_id}')
@@ -227,7 +227,7 @@ def handle_book_services(call):
 
 def finally_info_book(call, staff_id, selected_date, selected_time, service_name, service_id, my_personal_id):
     staff_list = book_staff()
-    book_list_1 = book_times(selected_date)
+    book_list_1 = book_times(selected_date, staff_id)
     full_time_info = book_list_1.get(selected_time)
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     keyboard = types.InlineKeyboardMarkup(row_width=2)
