@@ -14,6 +14,15 @@ token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
 
 flag = False
+staff_category_map = {
+    '227400': 10593304,
+    '250724': 10593304,
+    '869054': 10593304,
+    '227395': 10593304,
+    '194619': 10593304,
+    '2119274': 1100495,
+    '2119275': 1100495
+}
 
 
 @bot.message_handler(commands=['start'])
@@ -201,7 +210,8 @@ def handle_selected_time(call):
 
 
 def book_services(call, staff_id, selected_date, selected_time, my_personal_id):
-    booking_services = services()
+    booking_services = services(staff_category_map.get(staff_id))
+    print(booking_services)
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     buttons = [
         types.InlineKeyboardButton(name, callback_data=f'service_id_{service_id}_{staff_id}_{selected_date}_'
@@ -216,9 +226,10 @@ def book_services(call, staff_id, selected_date, selected_time, my_personal_id):
 @bot.callback_query_handler(func=lambda call: call.data.startswith('service_id_'))
 def handle_book_services(call):
     data_parts = call.data.split('_')
-    service_id, staff_id, selected_date, selected_time, my_personal_id= data_parts[2:7]
+    service_id, staff_id, selected_date, selected_time, my_personal_id = data_parts[2:7]
+
     print(data_parts)
-    booking_services = services()
+    booking_services = services(staff_category_map.get(staff_id))
     service_name = next((name for name, id_ in booking_services.items() if id_ == int(service_id)), None)
 
     bot.send_message(call.message.chat.id, f"Ви обрали послугу: {service_name}")
@@ -232,7 +243,8 @@ def finally_info_book(call, staff_id, selected_date, selected_time, service_name
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     buttons = types.InlineKeyboardButton('Підтвердити запис', callback_data=f'book_yes_{staff_id}_{service_id}_'
-                                                                            f'{full_time_info}_{my_personal_id}')
+                                                                            f'{selected_date}_{my_personal_id}_'
+                                                                            f'{selected_time}')
     buttons_1 = types.InlineKeyboardButton('Скасувати записа', callback_data='book_no')
     keyboard.add(buttons, buttons_1)
     bot.send_message(call.message.chat.id, f"Перевірте данні для запису:\n\nВи обрали барбера: {chosen_staff}\n"
@@ -243,21 +255,26 @@ def finally_info_book(call, staff_id, selected_date, selected_time, service_name
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('book_yes'))
 def booking_yes(call):
-    staff_id = call.data.split('_')[-4]
-    service_id = call.data.split('_')[-3]
-    full_time_info = call.data.split('_')[-2]
-    my_personal_id = call.data.split('_')[-1]
+    staff_id = call.data.split('_')[-5]
+    service_id = call.data.split('_')[-4]
+    selected_date = call.data.split('_')[-3]
+    print(type(selected_date))
+    my_personal_id = call.data.split('_')[-2]
+    selected_time = call.data.split('_')[-1]
+    print(f'{selected_date} {selected_time}')
     conn = sqlite3.connect("register.db")
     cursor = conn.cursor()
     cursor.execute("SELECT name, phone, email FROM registration WHERE id = ?", (my_personal_id,))
     user_info = cursor.fetchone()
     name, phone, email = user_info
-    success = finallys(service_id, staff_id, full_time_info, name, phone, email)
+    success = finallys(service_id, staff_id, selected_date, selected_time, name, phone, email)
     if success:
         bot.send_message(call.message.chat.id, "Запис пройшов успішно! ")
     else:
         bot.send_message(call.message.chat.id, "Вибачте, сталась помилка, спробуйте ще раз або зателефонуйте "
-                                               "до нашего барбера: +38(068)46-46-46-0")
+                                               "до нашего барбера: \n+38(068)46-46-46-0\n\nСкоріш за все ця помилка "
+                                               "звя'язана з тим, що йде конфлікт часу, тому уточнюйте час за телефоном "
+                                               "або спробуйте обрати інший час")
 
     conn.close()
 

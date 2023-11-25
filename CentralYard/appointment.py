@@ -43,7 +43,7 @@ def book_staff():
         print("Ошибка при запросе:", response.status_code)
 
 
-def services():
+def services(category_id):
 
     url = "https://api.alteg.io/api/v1/company/92533/services"
 
@@ -77,13 +77,19 @@ def services():
         data = response.json()
         service_list = {}
 
-        for staff_member in data.get('data', []):
-            service_id = staff_member.get('id')
-            service_name = staff_member.get('booking_title')
-            service_list[service_name] = service_id
+        for service in data.get('data', []):
+            if service.get('category_id') == category_id:
+                service_id = service.get('id')
+                service_name = service.get('title')
+                service_list[service_name] = service_id
+
         return service_list
     else:
         print("Ошибка при запросе:", response.status_code)
+
+
+# services_for_category = services(10593304)  # Передайте правильный category_id
+# print(services_for_category)
 
 
 def book_dates(staff_id):
@@ -172,7 +178,7 @@ def book_times(selected_date, staff_id):
     print(response.text)
 
 
-def finallys(service_id, staff_id, full_time_info, name, phone, email):
+def finallys(service_id, staff_id, selected_date, selected_time, name, phone, email):
     conn = http.client.HTTPSConnection("api.alteg.io")
     payload = json.dumps({
         "phone": phone,
@@ -185,7 +191,7 @@ def finallys(service_id, staff_id, full_time_info, name, phone, email):
                 service_id
               ],
               "staff_id": staff_id,
-              "datetime": full_time_info
+              "datetime": f'{selected_date} {selected_time}'
             }
           ]
     })
