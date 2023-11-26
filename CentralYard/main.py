@@ -161,10 +161,10 @@ def handle_chosen_staff(call):
     staff_list = book_staff()
     chosen_staff = next((name for name, id_ in staff_list.items() if id_ == int(staff_id)), None)
     bot.send_message(call.message.chat.id, f"Обран Барбер ✂️: {chosen_staff}")
-    book_services(call, staff_id, chosen_staff, my_personal_id)
+    book_services(call, staff_id, my_personal_id)
 
 
-def book_services(call, staff_id, chosen_staff, my_personal_id):
+def book_services(call, staff_id, my_personal_id):
     booking_services = services(staff_category_map.get(staff_id))
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     buttons = [
@@ -185,10 +185,10 @@ def handle_book_services(call):
     service_name = next((name for name, id_ in booking_services.items() if id_ == int(service_id)), None)
 
     bot.send_message(call.message.chat.id, f"Ви обрали послугу: {service_name}")
-    booking_dates(call, staff_id, service_id, my_personal_id, service_name)
+    booking_dates(call, staff_id, service_id, my_personal_id)
 
 
-def booking_dates(call, staff_id, service_id, my_personal_id, service_name):
+def booking_dates(call, staff_id, service_id, my_personal_id):
     booking_date = book_dates(staff_id)
     if not booking_date:
         bot.send_message(call.message.chat.id, "Извините, нет доступных дат.")
