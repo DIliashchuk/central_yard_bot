@@ -14,7 +14,7 @@ def Kozachuk_Andriy(call):
                                            'спілкування з цікавими людьми.\nПриходь - познайомимось! Буду '
                                            'чекати саме на тебе\n\nМій Instagram: '
                                            'https://instagram.com/kez_barber\n\nДавай не вагайся, буду не '
-                                           'Андрійом, а Кезом для тебе :)')
+                                           'Андрійом, а Кезом для тебе :)\n\nЗапис тут - /appointment')
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_grandmaster')
     keyboard.add(button)
@@ -33,7 +33,7 @@ def Munno_Nikola(call):
                                            "який вражатиме щодня, у буденному житті."
                                            "\n\nМій "
                                            'Instagram: https://instagram.com/munnonikola/\n\nЗалюбки зроблю '
-                                           'тобі топ зачіску :)')
+                                           'тобі топ зачіску :)\n\nЗапис тут - /appointment')
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_grandmaster')
     keyboard.add(button)
@@ -48,7 +48,8 @@ def Sergiy_Zaika(call):
                                            "виглядати як професійний спортсмен або знаменитість, або вам "
                                            "просто потрібен оновлений образ, я допоможу вам з цим.\n\n"
                                            "Мій Instagram: https://instagram.com/_iamf"
-                                           "reesoul/\n\nРозуміюсь на твоїх потребах, тож давай зробимо красиво :)")
+                                           "reesoul/\n\nРозуміюсь на твоїх потребах, тож давай зробимо красиво :)"
+                                           "\n\nЗапис тут - /appointment")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_grandmaster')
     keyboard.add(button)
@@ -63,7 +64,7 @@ def Viktor_Kozlovskyi(call):
                                            "стрижку, яка підкреслить вашу індивідуальність або вибухніть "
                                            "креативністю - я допоможу вам створити образ, який вам подобається.\n\n"
                                            "Мій Instagram: https://instagram.com/kozlovskyi"
-                                           "_viktor/\n\n Ти знаэшь де я тебе чекаю :)")
+                                           "_viktor/\n\n Ти знаэшь де я тебе чекаю :)\n\nЗапис тут - /appointment")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_grandmaster')
     keyboard.add(button)
@@ -77,7 +78,8 @@ def Artem_Scherban(call):
                                            "стилю. Якщо вам потрібна якісна стрижка чи креативне втілення задуму, "
                                            "я завжди готовий до творчого спілкування. Надам вам комфорт і креативність "
                                            "в кожній деталі вашого образу.\n\n"
-                                           "Мій Instagram: https://instagram.com/temaa__5/")
+                                           "Мій Instagram: https://instagram.com/temaa__5/"
+                                           "\n\nЗапис тут - /appointment")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_grandmaster')
     keyboard.add(button)
@@ -91,7 +93,8 @@ def Dmytro_Zhurovets(call):
                                            "створювати стильні образи. Моє завдання - зробити кожного клієнта "
                                            "задоволеним своїм виглядом та допомогти вам відчувати себе комфортно "
                                            "і впевнено.\n\n"
-                                           "Мій Instagram: https://instagram.com/mr.zghurovets/")
+                                           "Мій Instagram: https://instagram.com/mr.zghurovets/"
+                                           "\n\nЗапис тут - /appointment")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_master')
     keyboard.add(button)
@@ -105,7 +108,8 @@ def Denis_Isaenko(call):
                                            "кожного клієнта щасливим. Моя мета - забезпечити вам відчуття комфорту "
                                            "та задоволення від кожного візиту до мене. Чи це стрижка, чи це гоління, "
                                            "я завжди тут, щоб задовольнити ваші потреби.\n\n"
-                                           "Мій Instagram: https://instagram.com/_______dddddddddd________/")
+                                           "Мій Instagram: https://instagram.com/_______dddddddddd________/"
+                                           "\n\nЗапис тут - /appointment")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     button = types.InlineKeyboardButton("Прайс ✂️ Прайс ✂️ Прайс ✂️", callback_data='price_master')
     keyboard.add(button)

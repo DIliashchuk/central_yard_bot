@@ -4,15 +4,16 @@ from telebot import types
 import pandas as pd
 from io import BytesIO
 import requests
-from price import price_grandmaster, price_master
 from barber_info import Kozachuk_Andriy, Munno_Nikola, Sergiy_Zaika, Viktor_Kozlovskyi, Artem_Scherban, \
     Dmytro_Zhurovets, Denis_Isaenko
 from appointment import book_staff, book_dates, services, finallys, book_time
+from cachetools import cached, TTLCache
 
 
 token = '6979055272:AAHVUQ6wQbrlQuwd8Z5v1GuFy3IIF7Pb6lk'
 bot = telebot.TeleBot(token)
 
+cache = TTLCache(maxsize=128, ttl=3600)
 flag = False
 staff_category_map = {
     '227400': 10593304,
@@ -37,11 +38,12 @@ def price(message):
     button = types.InlineKeyboardButton("Вартість стрижки Cтаршогу Майстру", callback_data='price_grandmaster')
     button_2 = types.InlineKeyboardButton("Вартість стрижки Майстру", callback_data='price_master')
     keyboard.add(button, button_2)
-    bot.send_message(message.chat.id, "Дізнатись вартість💵\n\n<u><b>Старший Мастер:</b></u>\nМунно Нікола\n"
+    bot.send_message(message.chat.id, "Дізнатись вартість💵\n\n<u><b>Старший Мастер:</b></u>\n\nМунно Нікола\n"
                                       "Козловський Віктор\nАртем Щербань\nСергій Заїка\nКозачук Андрій"
-                                      "\n\n<u><b>Майстер</b></u>:\nДенис Ісаєнко\nДмитро Жировець\n\n"
-                                      "Ви можете подивитись більш делатальну \nінформацію про барберів у меню \n"
-                                      "команд 'Інфомарція про барбера' \nабо натисніть - /barber_info",
+                                      "\n\n<u><b>Майстер</b></u>:\n\nДенис Ісаєнко\nДмитро Згуровець\n\n"
+                                      "Для отримання більш детальної\nінформації про барберів, перейдіть\n"
+                                      "у меню команд 'Інформація про барберів'\nабо скористайтеся командою - "
+                                      "/barber_info",
                      reply_markup=keyboard, parse_mode='HTML')
 
 
@@ -73,7 +75,7 @@ def barber_info(message):
     photo_4 = open('photo/Журовець + Ісаєнко.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_4)
     keyboard_4 = types.InlineKeyboardMarkup(row_width=2)
-    button_7 = types.InlineKeyboardButton("Дмитро Жировець", callback_data='Dmytro_Zhurovets')
+    button_7 = types.InlineKeyboardButton("Дмитро Згуровець", callback_data='Dmytro_Zhurovets')
     button_8 = types.InlineKeyboardButton("Денис Ісаєнко", callback_data='Denis_Isaenko')
     keyboard_4.add(button_7, button_8)
     bot.send_message(message.chat.id, "Майстер:", reply_markup=keyboard_4)
@@ -251,7 +253,7 @@ def finally_info_book(call, staff_id, selected_date, selected_time, my_personal_
     bot.send_message(call.message.chat.id, f"Перевірте данні для запису:\n\nВи обрали барбера: {chosen_staff}\n"
                                            f"Ви обрали дату візиту: {selected_date}\nВи обрали час: {selected_time}\n"
                                            f"Ви обрали послугу: {service_name}\n\nЯкщо все вірно,"
-                                           f" просимо нажати Так для підтвердження", reply_markup=keyboard)
+                                           f" просимо нажати 'Підтвердити запис'", reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('book_yes'))
@@ -303,15 +305,39 @@ def social_media(message):
                      parse_mode='HTML')
 
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith('grand_master_price_'))
-def handle_price_grandmaster(call):
-    index = int(call.data.split('_')[-1])
+@cached(cache)
+def get_data_from_excel():
     excel_link = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRn9BG_Jqr6ouernSlnZGlKbV3159ZChYI_d_' \
                  'MlK-P0EkWVMxW5q-J5deHY5V-y3hQ-7_9DoGgLByLE/pub?output=xlsx'
     sheet_name = 'Grandmaster'
     response = requests.get(excel_link)
     excel_data = response.content
     df = pd.read_excel(BytesIO(excel_data), sheet_name=sheet_name)
+    return df
+
+
+def price_grandmaster(call):
+    df = get_data_from_excel()
+    buttons_per_row = 1
+    keyboard = types.InlineKeyboardMarkup(row_width=buttons_per_row)
+    buttons = []
+
+    for idx, row in df.iterrows():
+        haircut_price = f"{row['Стрижка']}"
+        callback_data = f'grand_master_price_{idx}'
+        button = types.InlineKeyboardButton(haircut_price, callback_data=callback_data)
+        buttons.append(button)
+
+    for i in range(0, len(buttons), buttons_per_row):
+        keyboard.add(*buttons[i:i + buttons_per_row])
+
+    bot.send_message(call.message.chat.id, "Оберіть послугу:", reply_markup=keyboard)
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('grand_master_price_'))
+def handle_price_grandmaster(call):
+    index = int(call.data.split('_')[-1])
+    df = get_data_from_excel()
     if index < len(df):
         row = df.iloc[index]
         haircut = row['Стрижка']
@@ -324,22 +350,46 @@ def handle_price_grandmaster(call):
         bot.send_message(call.message.chat.id, "Помилка: Немає інформації для цього індексу")
 
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith('master_price_'))
-def handle_price_grandmaster(call):
-    index = int(call.data.split('_')[-1])
+@cached(cache)
+def get_data_master_from_excel():
     excel_link = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRn9BG_Jqr6ouernSlnZGlKbV3159ZChYI_d_' \
                  'MlK-P0EkWVMxW5q-J5deHY5V-y3hQ-7_9DoGgLByLE/pub?output=xlsx'
     sheet_name = 'Master'
     response = requests.get(excel_link)
     excel_data = response.content
     df = pd.read_excel(BytesIO(excel_data), sheet_name=sheet_name)
+    return df
+
+
+def price_master(call):
+    df = get_data_master_from_excel()
+    buttons_per_row = 1
+    keyboard = types.InlineKeyboardMarkup(row_width=buttons_per_row)
+    buttons = []
+
+    for idx, row in df.iterrows():
+        haircut_price = f"{row['Стрижка']}"
+        callback_data = f'master_price_{idx}'
+        button = types.InlineKeyboardButton(haircut_price, callback_data=callback_data)
+        buttons.append(button)
+
+    for i in range(0, len(buttons), buttons_per_row):
+        keyboard.add(*buttons[i:i + buttons_per_row])
+
+    bot.send_message(call.message.chat.id, "Оберіть послугу:", reply_markup=keyboard)
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('master_price_'))
+def handle_price_master(call):
+    index = int(call.data.split('_')[-1])
+    df = get_data_from_excel()
     if index < len(df):
         row = df.iloc[index]
         haircut = row['Стрижка']
         price = row['Ціна']
         worktime = row['Тривалість']
         bot.send_message(call.message.chat.id, f"<u><b>Ви обрали послугу:</b></u> {haircut}\n<u><b>Вартісь "
-                                               f"складає:</b></u> {price} грн.\n<u><b>Тривалість стрижки:</b></u> "
+                                               f"складає:</b></u>  {price} грн.\n<u><b>Тривалість стрижки:</b></u> "
                                                f"{worktime}", parse_mode='HTML')
     else:
         bot.send_message(call.message.chat.id, "Помилка: Немає інформації для цього індексу")
@@ -368,4 +418,3 @@ def handle_action(call):
 
 
 bot.polling(none_stop=True, interval=0)
-1
