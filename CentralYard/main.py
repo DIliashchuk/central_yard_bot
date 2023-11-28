@@ -114,7 +114,8 @@ def registration_name(message):
         bot.send_message(message.chat.id, 'Ви вийшли з реєстраціії.\n\nЗліва знизу можете побачити '
                                           'меню зі всіма функціями\n⬇️')
         return
-    bot.send_message(message.chat.id, 'Будь-ласка, введіть ваш мобільний номер телефону: ')
+    bot.send_message(message.chat.id, 'Будь-ласка, введіть ваш мобільний номер телефону. \nНа цей номер буде '
+                                      'приходити СМС сповіщення про запис та нагадування про візит ')
     bot.register_next_step_handler(message, registration_phone, name)
 
 
@@ -124,7 +125,8 @@ def registration_phone(message, name):
         bot.send_message(message.chat.id, 'Ви вийшли з реєстраціії.\n\nЗліва знизу можете побачити '
                                           'меню зі всіма функціями\n⬇️')
         return
-    bot.send_message(message.chat.id, 'Будь-ласка, введіть вашу електронну пошту: ')
+    bot.send_message(message.chat.id, 'Будь-ласка, введіть вашу електронну пошту.\nЦе потрібно для онлайн запису, '
+                                      'на цю електрону пошту буде приходити підтвердження запису ')
     bot.register_next_step_handler(message, registration_mail, name, phone)
 
 
