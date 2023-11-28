@@ -208,7 +208,6 @@ def booking_dates(call, staff_id, service_id, my_personal_id):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('date_'))
 def handle_selected_date(call):
-    print(call.data)
     selected_date = call.data.split('_')[-3]
     staff_id = call.data.split('_')[-4]
     my_personal_id = call.data.split('_')[-2]

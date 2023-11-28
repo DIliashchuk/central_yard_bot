@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10b4e660-bfb5-49ed-825e-7c7b712b12bd" name="Changes" comment="new era &lt;3 2.0">
-      <change beforePath="$PROJECT_DIR$/.idea/central_yard_bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/central_yard_bot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CentralYard/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700832059741</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="new era &lt;3 2.0">
+      <option name="closed" value="true" />
+      <created>1701181163013</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1701181163013</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
