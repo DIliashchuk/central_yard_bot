@@ -49,7 +49,7 @@ def price(message):
 
 @bot.message_handler(commands=['barber_info'])
 def barber_info(message):
-    photo_1 = open('photo/Козачук + Мунно.jpeg', 'rb')
+    photo_1 = open('photo/KOZACHUK+MUNNO.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_1)
     keyboard_1 = types.InlineKeyboardMarkup(row_width=2)
     button = types.InlineKeyboardButton("Козачук Андрій", callback_data='Kozachuk_Andriy')
@@ -57,7 +57,7 @@ def barber_info(message):
     keyboard_1.add(button, button_2)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_1)
 
-    photo_2 = open('photo/Заїка + Козловский .jpeg', 'rb')
+    photo_2 = open('photo/ZAIKA+KOZLOVSKY.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_2)
     keyboard_2 = types.InlineKeyboardMarkup(row_width=2)
     button_3 = types.InlineKeyboardButton("Заїка Cергій", callback_data='Sergiy_Zaika')
@@ -65,14 +65,14 @@ def barber_info(message):
     keyboard_2.add(button_3, button_4)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_2)
 
-    photo_3 = open('photo/Щербань.jpeg', 'rb')
+    photo_3 = open('photo/SHCHERBAN.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_3)
     keyboard_3 = types.InlineKeyboardMarkup(row_width=2)
     button_6 = types.InlineKeyboardButton("Артем Щербань", callback_data='Artem_Scherban')
     keyboard_3.add(button_6)
     bot.send_message(message.chat.id, "Старший майстер:", reply_markup=keyboard_3)
 
-    photo_4 = open('photo/Журовець + Ісаєнко.jpeg', 'rb')
+    photo_4 = open('photo/ZHUROVETS+ISAENKO.jpeg', 'rb')
     bot.send_photo(message.chat.id, photo_4)
     keyboard_4 = types.InlineKeyboardMarkup(row_width=2)
     button_7 = types.InlineKeyboardButton("Дмитро Згуровець", callback_data='Dmytro_Zhurovets')

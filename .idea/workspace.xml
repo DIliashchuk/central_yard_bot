@@ -5,10 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10b4e660-bfb5-49ed-825e-7c7b712b12bd" name="Changes" comment="new era &lt;3 2.0">
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/central_yard_bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/central_yard_bot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CentralYard/barber_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/barber_info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CentralYard/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CentralYard/price.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Артем Щербань.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/ARTYOM SHCHERBAN.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Віктор Козловський.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/VICTOR KOZLOVSKY.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Денис Ісаєнко.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/DENYS ISAENKO.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Дмитро Жировець.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/DMYYRO ZHUROVETS.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Журовець + Ісаєнко.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/ZHUROVETS+ISAENKO.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Заїка + Козловский .jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/ZAIKA+KOZLOVSKY.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Козачук + Мунно.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/KOZACHUK+MUNNO.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Козачук Андрій.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/ANDREY KOZACHUK.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Никола Мунно.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/MUNNO NIKOLA.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Сергій Заїка.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/SERGEY ZAIKA.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentralYard/photo/Щербань.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/CentralYard/photo/SHCHERBAN.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +92,7 @@
       <workItem from="1700827741912" duration="15864000" />
       <workItem from="1700926154409" duration="1263000" />
       <workItem from="1701000337217" duration="7462000" />
+      <workItem from="1701109580272" duration="7946000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <option name="closed" value="true" />
@@ -204,7 +219,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="new era &lt;3 2.0" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/central_yard_bot$appointment.coverage" NAME="appointment Coverage Results" MODIFIED="1701008531344" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CentralYard" />
-    <SUITE FILE_PATH="coverage/central_yard_bot$main.coverage" NAME="main Coverage Results" MODIFIED="1701100941442" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CentralYard" />
+    <SUITE FILE_PATH="coverage/central_yard_bot$appointment.coverage" NAME="appointment Coverage Results" MODIFIED="1700595643398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CentralYard" />
+    <SUITE FILE_PATH="coverage/central_yard_bot$main.coverage" NAME="main Coverage Results" MODIFIED="1700901716810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CentralYard" />
   </component>
 </project>
